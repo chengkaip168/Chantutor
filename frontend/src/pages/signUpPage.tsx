@@ -32,10 +32,9 @@ function SignUpPage() {
         try {
           const res = (invokeResult as unknown as { response: Response }).response;
           const body = await res.json();
-          console.log("[signup] error body:", body);
           if (body?.error && typeof body.error === "string") msg = body.error;
-        } catch (e) {
-          console.log("[signup] could not parse error response:", e);
+        } catch {
+          // Response body was not JSON — fall back to the generic message
         }
         setError(msg);
         return;

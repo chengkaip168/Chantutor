@@ -20,7 +20,7 @@ export interface TestConfiguration {
   };
 }
 
-// Matches your Supabase columns exactly
+// Matches the Supabase columns exactly
 export interface Test {
   id: string;
   user_id: string;
