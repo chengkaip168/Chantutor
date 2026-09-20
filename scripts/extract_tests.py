@@ -36,8 +36,7 @@ import requests
 
 # ── Paths ──────────────────────────────────────────────────────────────────────
 
-ROOT = Path(__file__).resolve().parent.parent
-PDF_DIR = ROOT / "Chan-tutor" / "backend" / "testParsing" / "selectable" / "pdfs_to_process"
+PDF_DIR = Path(__file__).parent / "pdfs"
 OUT_DIR = Path(__file__).parent / "output"
 OUT_DIR.mkdir(exist_ok=True)
 

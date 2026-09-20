@@ -2,8 +2,7 @@ import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../supabase-client";
 import { UserContext } from "../components/userContext";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCrown } from "@fortawesome/free-solid-svg-icons";
+import { LogoMark } from "../assets/logo";
 import { computeSHSATScore, scoreLabel, isRevisingEditing, type Difficulty, type ScoredQuestion, type SHSATScore } from "../utils/scoring";
 import QuestionDetailModal from "../components/QuestionDetailModal";
 import { exportResultsPDF } from "../utils/exportResultsPDF";
@@ -903,7 +902,7 @@ function ParentPage() {
       {/* ── Header ── */}
       <div className="bg-white border-b border-slate-100 shadow-sm px-4 sm:px-6 py-3 sm:py-3.5 flex items-center justify-between shrink-0">
         <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-          <FontAwesomeIcon icon={faCrown} className="text-lg text-amber-400 shrink-0" />
+          <LogoMark className="h-5 w-auto shrink-0" />
           <span className="brand-name text-base text-slate-800 hidden sm:inline">TestQueens</span>
           <span className="text-xs font-semibold text-blue-600 bg-blue-50 border border-blue-100 px-2 sm:px-2.5 py-0.5 rounded-full shrink-0">
             Parent Portal

@@ -1,7 +1,60 @@
 @import "tailwindcss";
 
+/* ── Brand palette ────────────────────────────────────────────────────────
+   The TestQueens logo is navy #1b2a44 + gold #c7a96a.
+
+   Rather than rewrite 646 utility classes across the app, the `blue` and
+   `amber` ramps are redefined here so every existing `bg-blue-600`,
+   `text-amber-500`, `ring-amber-500`… picks up the brand hues automatically.
+
+     blue-600  = #1b2a44  (logo navy — primary buttons, links)
+     amber-500 = #c7a96a  (logo gold — accents, crown, focus rings)
+
+   emerald / rose are deliberately untouched: they carry correct/incorrect
+   meaning in tests and results, where instant readability matters more than
+   palette unity. zinc / slate remain the neutrals.
+   ------------------------------------------------------------------------ */
+@theme {
+  /* Navy */
+  --color-blue-50:  #f4f6f9;
+  --color-blue-100: #e6ebf2;
+  --color-blue-200: #c9d4e3;
+  --color-blue-300: #a3b5cd;
+  --color-blue-400: #6b83a6;
+  --color-blue-500: #3d5578;
+  --color-blue-600: #1b2a44;
+  --color-blue-700: #162236;
+  --color-blue-800: #111a2a;
+  --color-blue-900: #0d1420;
+  --color-blue-950: #080d15;
+
+  /* Gold */
+  --color-amber-50:  #faf7f0;
+  --color-amber-100: #f4eede;
+  --color-amber-200: #e9dcbd;
+  --color-amber-300: #dcc79a;
+  --color-amber-400: #d1b883;
+  --color-amber-500: #c7a96a;
+  --color-amber-600: #b08f4e;
+  --color-amber-700: #7d6338;
+  --color-amber-800: #5f4b2b;
+  --color-amber-900: #443621;
+  --color-amber-950: #261e12;
+}
+
+/* Buttons sitewide use Almendra — the one deliberate serif on the site.
+   Applied to the element, so any button with its own explicit font-family
+   (e.g. the login page's link-styled buttons) keeps that font by specificity.
+   Falls back to Albert Sans, never a system serif. */
+button {
+  font-family: 'Almendra', 'Albert Sans', sans-serif;
+}
+
+/* Wordmark — small-caps echoing the logo lockup's structure.
+   "TestQueens" renders as large T + Q with small-cap EST / UEENS. */
 .brand-name {
-  font-family: 'Outfit', sans-serif;
-  font-weight: 800;
-  letter-spacing: -0.03em;
+  font-family: 'Albert Sans', sans-serif;
+  font-weight: 600;
+  font-variant-caps: small-caps;
+  letter-spacing: 0.02em;
 }

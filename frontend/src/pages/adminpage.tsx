@@ -2,8 +2,7 @@ import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../supabase-client";
 import { UserContext } from "../components/userContext";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCrown } from "@fortawesome/free-solid-svg-icons";
+import { LogoMark } from "../assets/logo";
 import AdminStudentsPanel from "../components/AdminStudentsPanel";
 import AdminQuestionsPanel from "../components/AdminQuestionsPanel";
 import AdminReportsPanel from "../components/AdminReportsPanel";
@@ -102,7 +101,7 @@ export default function AdminPage() {
         {/* Logo */}
         <div className="px-2 lg:px-5 py-5 border-b border-zinc-200">
           <div className="flex items-center justify-center lg:justify-start gap-2.5">
-            <FontAwesomeIcon icon={faCrown} className="text-amber-400 text-lg shrink-0" />
+            <LogoMark className="h-5 w-auto shrink-0" />
             <div className="min-w-0 hidden lg:block">
               <p className="brand-name text-lg text-zinc-900 leading-tight">TestQueens</p>
               <p className="text-sm text-zinc-400 font-medium">Admin Console</p>

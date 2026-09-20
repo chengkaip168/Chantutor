@@ -216,8 +216,8 @@ export default function NumberLineClick({
             const cx     = toX(liveVal);
             const tx     = tipX(cx);
             const stroke = isReadOnly
-              ? (isCorrect ? "#2563eb" : "#ef4444")
-              : "#2563eb";
+              ? (isCorrect ? "#1b2a44" : "#ef4444")
+              : "#1b2a44";
 
             return (
               <g pointerEvents="none">
@@ -256,7 +256,7 @@ export default function NumberLineClick({
             <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
               <svg width={16} height={16} viewBox="0 0 16 16">
                 <circle cx={8} cy={8} r={6} fill="#fff"
-                  stroke={isCorrect ? "#2563eb" : "#ef4444"} strokeWidth={2.5} />
+                  stroke={isCorrect ? "#1b2a44" : "#ef4444"} strokeWidth={2.5} />
               </svg>
               <span style={{ color: "#374151" }}>
                 Your answer:&nbsp;

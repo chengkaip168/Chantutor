@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faBookOpen, faBook, faChartLine, faHouse, faClock, faCircleUser, faArrowRightFromBracket, faCrown, faArrowRight, faArrowLeft, faXmark, faTable} from '@fortawesome/free-solid-svg-icons';
-import Logo from "./logo.tsx";
+import { faBars, faBookOpen, faBook, faChartLine, faHouse, faClock, faCircleUser, faArrowRightFromBracket, faArrowRight, faArrowLeft, faXmark, faTable} from '@fortawesome/free-solid-svg-icons';
+import { LogoMark } from "./logo";
 
 export const icons: Record<string, ReactNode> = {
     hamburger: (
@@ -23,7 +23,7 @@ export const icons: Record<string, ReactNode> = {
         <FontAwesomeIcon icon={faClock} className="text-lg"/>
     ),
     logo : (
-        <FontAwesomeIcon icon={faCrown} className="text-center md:text-2xl text-amber-300" />
+        <LogoMark className="h-6 w-auto" />
     ),
     user : (
         <FontAwesomeIcon icon={faCircleUser} />

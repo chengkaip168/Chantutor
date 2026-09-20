@@ -342,8 +342,8 @@ function renderQuestion(q: IncorrectQuestion): string {
     ).join("");
     questionBodyHTML = `
       ${embedded.prompt ? `<div style="font-size:12.5px;color:#111827;line-height:1.6;margin-bottom:8px;">${prepareHtml(embedded.prompt)}</div>` : ""}
-      <div style="border:1.5px solid #bfdbfe;border-radius:8px;background:#eff6ff;padding:10px 13px;margin-bottom:8px;">
-        <div style="font-size:9px;font-weight:700;color:#3b82f6;text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px;">Article</div>
+      <div style="border:1.5px solid #c9d4e3;border-radius:8px;background:#f4f6f9;padding:10px 13px;margin-bottom:8px;">
+        <div style="font-size:9px;font-weight:700;color:#1b2a44;text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px;">Article</div>
         ${sentenceHTML}
       </div>`;
   } else {
@@ -353,7 +353,7 @@ function renderQuestion(q: IncorrectQuestion): string {
   return `
     <div style="margin-bottom:14px;padding:13px 15px;border:1.5px solid #e5e7eb;border-radius:10px;background:#ffffff;box-shadow:0 1px 3px rgba(0,0,0,0.05);">
       <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:4px;">
-        <span style="flex-shrink:0;width:23px;height:23px;border-radius:6px;background:#1d4ed8;color:#ffffff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;margin-top:1px;">${q.questionNumber}</span>
+        <span style="flex-shrink:0;width:23px;height:23px;border-radius:6px;background:#162236;color:#ffffff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;margin-top:1px;">${q.questionNumber}</span>
         <div style="flex:1;">${questionBodyHTML}</div>
       </div>
       ${answersHTML}
@@ -374,9 +374,9 @@ function buildPassageParagraphFragments(passageText: string, passageId: string):
     const topPad     = isFirst ? "13px" : "2px";
     const botPad     = isLast  ? "13px" : "2px";
     const label      = isFirst
-      ? `<div style="font-size:9px;font-weight:700;color:#3b82f6;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">Passage</div>`
+      ? `<div style="font-size:9px;font-weight:700;color:#1b2a44;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">Passage</div>`
       : "";
-    const html = `<div style="background:#eff6ff;padding:${topPad} 15px ${botPad} 15px;">${label}<p style="margin:0 0 ${mb} 0;font-size:11px;line-height:1.6;color:#1e3a5f;${isTitle ? "font-weight:700;text-align:center;" : ""}">${prepareHtml(p)}</p></div>`;
+    const html = `<div style="background:#f4f6f9;padding:${topPad} 15px ${botPad} 15px;">${label}<p style="margin:0 0 ${mb} 0;font-size:11px;line-height:1.6;color:#1e3a5f;${isTitle ? "font-weight:700;text-align:center;" : ""}">${prepareHtml(p)}</p></div>`;
     return { html, style: PASSAGE_PARA_FRAG_STYLE, passageId };
   });
 }
@@ -443,7 +443,7 @@ function buildSectionFragments(section: IncorrectReportSection, showHeader: bool
   const mathQs = section.questions.filter(q => (q.subject ?? "").toLowerCase() !== "english");
 
   if (elaQs.length > 0) {
-    frags.push(frag(buildSubjectHeaderHTML("ELA", "#2563eb", "#dbeafe", elaQs.length)));
+    frags.push(frag(buildSubjectHeaderHTML("ELA", "#1b2a44", "#e6ebf2", elaQs.length)));
 
     const standaloneQs = elaQs.filter(q => !q.passageContent);
     const rcQs         = elaQs.filter(q =>  q.passageContent);
@@ -513,7 +513,7 @@ function buildReportHeaderHTML(data: IncorrectReportData, dateStr: string): stri
   return `
     <div style="display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:16px;border-bottom:2px solid #f3f4f6;">
       <div>
-        <div style="font-size:15px;font-weight:800;color:#111827;font-family:'Outfit',sans-serif;letter-spacing:-0.03em;margin-bottom:5px;">&#128081; TestQueens</div>
+        <div style="font-size:17px;font-weight:600;color:#1b2a44;font-family:'Albert Sans',sans-serif;font-variant-caps:small-caps;letter-spacing:0.02em;margin-bottom:5px;">TestQueens</div>
         <h1 style="font-size:19px;font-weight:800;color:#111827;margin:0 0 4px 0;">Missed Questions Report</h1>
         <p style="font-size:12.5px;font-weight:600;color:#374151;margin:0 0 2px 0;">${testName}</p>
         <p style="font-size:11.5px;color:#6b7280;margin:0 0 2px 0;">${data.studentName}</p>
@@ -530,7 +530,7 @@ function buildReportHeaderHTML(data: IncorrectReportData, dateStr: string): stri
 function buildReportFooterHTML(dateStr: string): string {
   return `
     <div style="padding-top:12px;border-top:1px solid #f3f4f6;display:flex;justify-content:space-between;font-size:10px;color:#9ca3af;">
-      <span style="font-family:'Outfit',sans-serif;font-weight:700;letter-spacing:-0.02em;">TestQueens</span>
+      <span style="font-family:'Albert Sans',sans-serif;font-weight:600;font-variant-caps:small-caps;letter-spacing:0.02em;color:#1b2a44;">TestQueens</span>
       <span>Generated ${dateStr}</span>
     </div>`;
 }
@@ -685,7 +685,7 @@ export async function exportIncorrectPDF(data: IncorrectReportData): Promise<voi
     }
     for (const { top, bot } of passageBoxes.values()) {
       if (bot - top > 0) {
-        pdf.setDrawColor(191, 219, 254);  // #bfdbfe
+        pdf.setDrawColor(191, 219, 254);  // #c9d4e3
         pdf.setLineWidth(0.4);
         pdf.rect(FRAG_PAD_H_MM, top, PW - 2 * FRAG_PAD_H_MM, bot - top, "S");
       }

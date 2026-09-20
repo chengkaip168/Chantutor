@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { supabase } from "../supabase-client";
 import { useNavigate } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCrown } from "@fortawesome/free-solid-svg-icons";
+import { LogoMark } from "../assets/logo";
 
 function SignUpPage() {
   const [accountType, setAccountType] = useState<"student" | "parent" | "tutor">("student");
@@ -67,7 +66,7 @@ function SignUpPage() {
         <div className="absolute -top-20 -left-20 w-64 h-64 rounded-full bg-white/5" />
         <div className="absolute -bottom-32 -right-16 w-96 h-96 rounded-full bg-white/5" />
         <div className="relative z-10 flex flex-col items-center text-center gap-6">
-          <FontAwesomeIcon icon={faCrown} className="text-6xl text-amber-300" />
+          <LogoMark className="h-16 w-auto" />
           <div>
             <h1 className="brand-name text-5xl text-white mb-2">TestQueens</h1>
             <p className="text-blue-200 text-lg leading-relaxed">
@@ -93,7 +92,7 @@ function SignUpPage() {
       <div className="flex flex-1 items-center justify-center bg-white p-4 sm:p-8 overflow-y-auto">
         <div className="w-full max-w-sm flex flex-col gap-6 py-4">
           <div className="flex md:hidden items-center gap-2 mb-2">
-            <FontAwesomeIcon icon={faCrown} className="text-2xl text-amber-400" />
+            <LogoMark className="h-7 w-auto" />
             <span className="brand-name text-2xl text-slate-900">TestQueens</span>
           </div>
           <div>

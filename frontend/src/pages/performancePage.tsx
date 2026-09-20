@@ -37,7 +37,7 @@ function scoreBand(s: number): { label: string; cls: string } {
 // Maps the recharts line stroke colours (set below) to Tailwind text classes
 const LINE_COLOR_CLS: Record<string, string> = {
   "#64748b": "text-slate-600",
-  "#3b82f6": "text-blue-600",
+  "#1b2a44": "text-blue-600",
   "#8b5cf6": "text-violet-600",
 };
 
@@ -621,12 +621,12 @@ export default function PerformancePage() {
                     <Tooltip content={<SHSATTooltip />} />
                     <ReferenceLine y={620} stroke="#10b981" strokeDasharray="5 4" strokeWidth={1.5}
                       label={{ value: "620 – Top schools", position: "insideTopRight", fontSize: 10, fill: "#10b981", dy: -4 }} />
-                    <ReferenceLine y={580} stroke="#3b82f6" strokeDasharray="5 4" strokeWidth={1.5}
-                      label={{ value: "580 – Competitive", position: "insideTopRight", fontSize: 10, fill: "#3b82f6", dy: -4 }} />
+                    <ReferenceLine y={580} stroke="#1b2a44" strokeDasharray="5 4" strokeWidth={1.5}
+                      label={{ value: "580 – Competitive", position: "insideTopRight", fontSize: 10, fill: "#1b2a44", dy: -4 }} />
                     <ReferenceLine y={500} stroke="#f59e0b" strokeDasharray="5 4" strokeWidth={1.5}
                       label={{ value: "500 – Approaching", position: "insideTopRight", fontSize: 10, fill: "#f59e0b", dy: -4 }} />
-                    <Line type="monotone" dataKey="score" name="SHSAT Score" stroke="#3b82f6" strokeWidth={2.5}
-                      dot={{ r: 5, fill: "#3b82f6", strokeWidth: 0 }} activeDot={{ r: 7 }} connectNulls={false} />
+                    <Line type="monotone" dataKey="score" name="SHSAT Score" stroke="#1b2a44" strokeWidth={2.5}
+                      dot={{ r: 5, fill: "#1b2a44", strokeWidth: 0 }} activeDot={{ r: 7 }} connectNulls={false} />
                   </LineChart>
                 </ResponsiveContainer>
               )}
@@ -655,8 +655,8 @@ export default function PerformancePage() {
                     <Legend wrapperStyle={{ fontSize: 11, paddingTop: 8 }} />
                     <Line type="monotone" dataKey="overall" name="Overall" stroke="#64748b" strokeWidth={2.5}
                       dot={{ r: 5, fill: "#64748b", strokeWidth: 0 }} activeDot={{ r: 7 }} connectNulls={false} />
-                    <Line type="monotone" dataKey="english" name="English" stroke="#3b82f6" strokeWidth={2}
-                      strokeDasharray="6 3" dot={{ r: 4, fill: "#3b82f6", strokeWidth: 0 }} activeDot={{ r: 6 }} connectNulls={false} />
+                    <Line type="monotone" dataKey="english" name="English" stroke="#1b2a44" strokeWidth={2}
+                      strokeDasharray="6 3" dot={{ r: 4, fill: "#1b2a44", strokeWidth: 0 }} activeDot={{ r: 6 }} connectNulls={false} />
                     <Line type="monotone" dataKey="math" name="Math" stroke="#8b5cf6" strokeWidth={2}
                       strokeDasharray="6 3" dot={{ r: 4, fill: "#8b5cf6", strokeWidth: 0 }} activeDot={{ r: 6 }} connectNulls={false} />
                   </LineChart>

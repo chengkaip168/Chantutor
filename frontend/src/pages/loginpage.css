@@ -1,0 +1,454 @@
+/* ==========================================================================
+   Login page — presentation layer only.
+   Namespaced under .tq-login; nothing here leaks to any other page.
+
+   Direction: warm parchment-and-ink. Brand is the navy/gold crown lockup.
+   ========================================================================== */
+
+.tq-login {
+  /* ── Parchment ─────────────────────────────────────────────────────── */
+  --parchment-50:  #faf7f1;
+  --parchment-100: #f4efe4;
+  --parchment-200: #ebe4d5;
+  --parchment-300: #ddd3bf;
+
+  /* ── Ink ───────────────────────────────────────────────────────────── */
+  --navy-900: #0d1524;
+  --navy-700: #1b2a44;
+  --navy-500: #3a4d6d;
+
+  /* ── Gold. Never used as type: it measures 1.97:1 on parchment. ────── */
+  --gold-500: #c7a96a;
+  --gold-700: #8f7540;
+
+  /* ── Error. Warm-toned so it belongs to the parchment world. ───────── */
+  --error-fill:   #fdf2f2;
+  --error-line:   #e8b4bc;
+  --error-accent: #a8323f;
+  --error-text:   #7f1d2e;
+
+  /* Single light source, upper-left. Lit edges near-white, shadow edges
+     warm navy — never black, which goes muddy grey over cream. */
+  --rim-lit:      rgba(255, 255, 255, 0.85);
+  --rim-shade:    rgba(27, 42, 68, 0.08);
+  --shadow-tight: 0 2px 6px rgba(27, 42, 68, 0.08);
+  --shadow-wide:  0 24px 60px rgba(27, 42, 68, 0.10);
+  --inset-lit:    inset 1px 1px 0 rgba(255, 255, 255, 0.90);
+  --inset-field:  inset 0 2px 4px rgba(27, 42, 68, 0.06);
+
+  /* Radius tightens as an element grows more interactive. */
+  --r-card:  16px;
+  --r-input: 8px;
+  --r-btn:   4px;
+
+  /* 8px vertical rhythm */
+  --s1: 8px;
+  --s2: 16px;
+  --s3: 24px;
+  --s5: 40px;
+
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  width: 100%;
+  overflow: hidden;
+  background: var(--parchment-100);
+  font-family: 'Karla', sans-serif;
+}
+
+/* ── Background field ──────────────────────────────────────────────────
+   Density varies left-to-right so the area behind the card differs in
+   value from the area beside it. */
+.tq-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(90% 70% at 18% 12%, var(--parchment-50) 0%, transparent 62%),
+    linear-gradient(105deg, var(--parchment-100) 0%, var(--parchment-100) 44%, var(--parchment-200) 100%);
+  animation: tq-bg-in 600ms ease-out both;
+}
+
+/* Shapes deliberately straddle the card's left edge so a contour is seen
+   bending as it passes beneath the glass. Without that, glass has no job. */
+.tq-shape {
+  position: absolute;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: 9999px;
+  will-change: transform;
+}
+.tq-shape-1 {                      /* crosses the card's left edge */
+  top: -12vh; left: 38%;
+  width: 46vw; height: 46vw;
+  min-width: 420px; min-height: 420px;
+  background: var(--parchment-200);
+  animation: tq-drift 30s ease-in-out infinite;
+}
+.tq-shape-2 {                      /* deeper value, also crosses the card */
+  bottom: -18vh; left: 46%;
+  width: 40vw; height: 40vw;
+  min-width: 360px; min-height: 360px;
+  background: var(--parchment-300);
+  opacity: 0.55;
+}
+.tq-shape-3 {                      /* the single decorative gold shape */
+  top: 34%; left: 6%;
+  width: 22vw; height: 22vw;
+  min-width: 200px; min-height: 200px;
+  background: var(--gold-500);
+  opacity: 0.12;
+}
+
+/* Paper, not static. */
+.tq-grain {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ── One shared grid ──────────────────────────────────────────────────
+   Brand zone and card are siblings in a single centred grid row with
+   align-items:start, so the lockup's top and the card's top edge resolve
+   against one horizontal axis instead of centring independently. */
+.tq-shell {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-content: center;
+  align-items: start;
+  column-gap: clamp(2rem, 6vw, 6rem);
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: var(--s5) clamp(1.5rem, 5vw, 5rem);
+  box-sizing: border-box;
+}
+
+.tq-brandzone {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-top: var(--s3);
+}
+
+.tq-formzone { display: flex; justify-content: center; }
+
+/* ── Brand zone ────────────────────────────────────────────────────── */
+.tq-brand-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  max-width: 30rem;
+}
+
+/* The lockup is an image: crown + wordmark together. No font applies. */
+.tq-lockup {
+  display: block;
+  width: clamp(15rem, 23vw, 20.5rem);
+  height: auto;
+  margin-bottom: var(--s3);
+}
+
+.tq-tagline {
+  font-family: 'Karla', sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.45;
+  color: var(--navy-500);
+  margin: 0;
+}
+
+/* Gold works as a rule where it fails as type. */
+.tq-rule {
+  width: 4.5rem;
+  height: 1px;
+  background: var(--gold-500);
+  border: 0;
+  margin: var(--s3) 0;
+}
+
+.tq-bullets {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2);
+  margin: 0;
+  width: 100%;
+}
+
+.tq-bullet {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: 'Karla', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--navy-500);
+}
+
+.tq-bullet-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: var(--gold-500);
+  flex-shrink: 0;
+}
+
+/* ── The glass card ───────────────────────────────────────────────────
+   Lighter and cooler than the warmer field behind it, so it separates by
+   value and temperature rather than by a drawn border. */
+.tq-card {
+  position: relative;
+  width: 100%;
+  max-width: 27rem;
+  padding: var(--s5);
+  box-sizing: border-box;
+  border-radius: var(--r-card);
+  background: rgba(250, 247, 241, 0.62);
+  -webkit-backdrop-filter: blur(22px) saturate(120%);
+  backdrop-filter: blur(22px) saturate(120%);
+  border: 1px solid var(--rim-shade);
+  border-top-color: var(--rim-lit);
+  border-left-color: var(--rim-lit);
+  box-shadow: var(--shadow-tight), var(--shadow-wide), var(--inset-lit);
+}
+
+.tq-card-head { margin-bottom: var(--s3); }
+
+.tq-h2 {
+  font-family: 'Albert Sans', sans-serif;
+  font-size: 38px;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  line-height: 1.1;
+  color: var(--navy-700);
+  margin: 0;
+}
+
+.tq-sub {
+  font-family: 'Karla', sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--navy-500);
+  margin: var(--s1) 0 0 0;
+}
+
+/* Group gap (24px) is deliberately wider than label→input gap (8px), so a
+   label reads as belonging to the input beneath it. */
+.tq-form { display: flex; flex-direction: column; gap: var(--s3); }
+.tq-field { display: flex; flex-direction: column; gap: var(--s1); }
+.tq-field-row { display: flex; align-items: baseline; justify-content: space-between; gap: var(--s2); }
+
+/* Labels separate from input text by case and tracking, not size. */
+.tq-label {
+  font-family: 'Karla', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--navy-700);
+}
+
+/* 16px minimum: anything smaller triggers iOS Safari auto-zoom on focus. */
+.tq-input {
+  width: 100%;
+  box-sizing: border-box;
+  font-family: 'Karla', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--navy-700);
+  background: var(--parchment-50);
+  border: 1px solid var(--parchment-300);
+  border-radius: var(--r-input);
+  padding: 12px 14px;
+  outline: none;
+  box-shadow: var(--inset-field);
+  transition: background-color 180ms ease-out, border-color 180ms ease-out;
+}
+.tq-input::placeholder { color: var(--navy-500); opacity: 1; }
+.tq-input:hover { border-color: var(--gold-500); }
+
+/* Solid ring with offset — never a soft glow. */
+.tq-input:focus,
+.tq-input:focus-visible {
+  background: var(--parchment-50);
+  border-color: var(--gold-700);
+  outline: 2px solid var(--gold-700);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+/* ── Primary action ───────────────────────────────────────────────────
+   Navy, fully opaque. On a light field navy out-contrasts gold, and gold
+   with navy type would read as a warning banner. */
+.tq-btn {
+  width: 100%;
+  min-height: 48px;
+  /* Almendra runs a smaller x-height than the sans faces, so it is set
+     slightly larger to hold the same optical weight as the primary action. */
+  font-family: 'Almendra', 'Albert Sans', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--parchment-50);
+  background: var(--navy-700);
+  border: 1px solid var(--navy-700);
+  border-radius: var(--r-btn);
+  padding: 14px 16px;
+  cursor: pointer;
+  box-shadow: var(--shadow-tight);
+  transition: transform 200ms ease-out, background-color 200ms ease-out, box-shadow 200ms ease-out;
+}
+.tq-btn:hover:not(:disabled) {
+  background: var(--navy-900);
+  border-color: var(--navy-900);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-tight), 0 10px 22px rgba(27, 42, 68, 0.14);
+}
+.tq-btn:active:not(:disabled) { transform: scale(0.98); transition-duration: 100ms; }
+.tq-btn:focus-visible { outline: 2px solid var(--gold-700); outline-offset: 2px; }
+.tq-btn:disabled { opacity: 0.55; cursor: default; }
+
+/* ── Links: navy type, gold only on the hover underline ───────────────── */
+.tq-link {
+  font-family: 'Karla', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--navy-700);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--parchment-300);
+  transition: text-decoration-color 150ms ease-out, color 150ms ease-out;
+}
+.tq-link:hover { text-decoration-color: var(--gold-500); }
+.tq-link:focus-visible { outline: 2px solid var(--gold-700); outline-offset: 3px; border-radius: 2px; }
+
+.tq-link-sm { font-size: 13px; }
+.tq-link-quiet { color: var(--navy-500); }
+.tq-link-quiet:hover { color: var(--navy-700); }
+
+/* No dead space below the final line. */
+.tq-foot {
+  font-family: 'Karla', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--navy-500);
+  text-align: center;
+  margin: var(--s3) 0 0 0;
+}
+
+/* Errors sit on a more opaque surface than the rest of the card. */
+.tq-error {
+  font-family: 'Karla', sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--error-text);
+  background: var(--error-fill);
+  border: 1px solid var(--error-line);
+  border-left: 3px solid var(--error-accent);
+  border-radius: var(--r-input);
+  padding: 12px 14px;
+  margin: 0;
+}
+
+/* ── Forgot-password sent state ───────────────────────────────────────── */
+.tq-sent { display: flex; flex-direction: column; align-items: center; gap: var(--s2); padding: var(--s2) 0; text-align: center; }
+.tq-sent-badge {
+  width: 48px; height: 48px;
+  border-radius: 9999px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--parchment-200);
+  border: 1px solid var(--parchment-300);
+  color: var(--gold-700);
+}
+.tq-h3 { font-family: 'Albert Sans', sans-serif; font-size: 22px; font-weight: 600; color: var(--navy-700); margin: 0; }
+.tq-sent-copy { font-family: 'Karla', sans-serif; font-size: 15px; color: var(--navy-500); margin: var(--s1) 0 0 0; line-height: 1.55; }
+.tq-sent-em { font-weight: 700; color: var(--navy-700); }
+
+/* Mobile duplicate brand block — the lockup covers every breakpoint. */
+.tq-mobile-brand { display: none; }
+
+/* ══ Entrance — completes at 640ms ═══════════════════════════════════ */
+@keyframes tq-bg-in   { from { opacity: 0; } to { opacity: 1; } }
+@keyframes tq-rise    { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes tq-rise-sm { from { opacity: 0; transform: translateY(8px); }  to { opacity: 1; transform: none; } }
+@keyframes tq-card-in { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+@keyframes tq-drift {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50%      { transform: translate3d(-1.4%, 1.8%, 0); }
+}
+
+.tq-a-lockup  { animation: tq-rise    480ms cubic-bezier(.2,.7,.3,1)  80ms both; }
+.tq-a-tagline { animation: tq-rise    440ms cubic-bezier(.2,.7,.3,1) 190ms both; }
+.tq-a-rule    { animation: tq-rise-sm 380ms ease-out 250ms both; }
+.tq-a-b1      { animation: tq-rise-sm 380ms ease-out 310ms both; }
+.tq-a-b2      { animation: tq-rise-sm 380ms ease-out 380ms both; }
+.tq-a-b3      { animation: tq-rise-sm 380ms ease-out 450ms both; }
+.tq-a-card    { animation: tq-card-in 520ms cubic-bezier(.2,.7,.3,1) 200ms both; }
+.tq-a-f1      { animation: tq-rise-sm 360ms ease-out 380ms both; }
+.tq-a-f2      { animation: tq-rise-sm 360ms ease-out 440ms both; }
+.tq-a-f3      { animation: tq-rise-sm 360ms ease-out 500ms both; }
+.tq-a-f4      { animation: tq-rise-sm 360ms ease-out 560ms both; }
+
+/* ══ Responsive — zones stack below 900px ═══════════════════════════ */
+@media (max-width: 900px) {
+  .tq-shell {
+    grid-template-columns: 1fr;
+    align-content: start;
+    row-gap: var(--s5);
+    padding: var(--s5) var(--s3);
+  }
+  .tq-brandzone { align-items: center; padding-top: 0; }
+  .tq-brand-inner { align-items: center; text-align: center; }
+  .tq-formzone { justify-content: center; }
+
+  /* Scaled down, never cropped */
+  .tq-lockup { width: clamp(11rem, 52vw, 15rem); }
+  .tq-tagline { font-size: 17px; }
+
+  /* Bullets hidden via CSS; markup untouched */
+  .tq-rule,
+  .tq-bullets { display: none; }
+
+  .tq-card {
+    padding: var(--s3);
+    max-width: 100%;
+    /* Lighter blur protects frame rate on mobile GPUs */
+    -webkit-backdrop-filter: blur(12px) saturate(115%);
+    backdrop-filter: blur(12px) saturate(115%);
+  }
+  .tq-h2 { font-size: 30px; font-variation-settings: 'opsz' 30; }
+}
+
+/* ══ Fallback: near-solid fills where backdrop-filter is unsupported ══ */
+@supports not (backdrop-filter: blur(1px)) {
+  .tq-card { background: rgba(250, 247, 241, 0.97); }
+  .tq-input { background: var(--parchment-50); }
+  .tq-error { background: var(--error-fill); }
+}
+
+/* ══ Reduced motion: everything off ═════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  .tq-login *,
+  .tq-login *::before,
+  .tq-login *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  .tq-bg, .tq-shape-1,
+  .tq-a-lockup, .tq-a-tagline, .tq-a-rule,
+  .tq-a-b1, .tq-a-b2, .tq-a-b3,
+  .tq-a-card, .tq-a-f1, .tq-a-f2, .tq-a-f3, .tq-a-f4 {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

@@ -2,8 +2,7 @@ import { icons } from '../assets/icons.tsx';
 import SideNavIcons from './sideNavIcons.tsx';
 import { useNavigate, useLocation } from "react-router-dom";
 import { supabase } from '../supabase-client.ts';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCrown } from '@fortawesome/free-solid-svg-icons';
+import { LogoMark } from "../assets/logo";
 import { useContext } from 'react';
 import { UserContext } from './userContext.ts';
 
@@ -23,7 +22,7 @@ export default function SideBar() {
       <div className="flex flex-col gap-1">
         {/* Logo */}
         <div className="flex items-center gap-2.5 px-4 pb-5 mb-2 border-b border-slate-100">
-          <FontAwesomeIcon icon={faCrown} className="text-xl text-amber-400 shrink-0" />
+          <LogoMark className="h-5 w-auto shrink-0" />
           <span className="md:inline hidden brand-name text-base text-slate-800">TestQueens</span>
         </div>
 

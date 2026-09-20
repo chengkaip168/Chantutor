@@ -211,8 +211,8 @@ export default function SHSATGrapher({
           <polygon points={`${ORIGIN},${toPx(0, RANGE).y} ${ORIGIN - 4},${toPx(0, RANGE).y + 7} ${ORIGIN + 4},${toPx(0, RANGE).y + 7}`} fill="#374151" />
 
           {/* Axis labels */}
-          <text x={toPx(RANGE, 0).x - 3} y={ORIGIN + 16} fontSize="11" fill="#374151" fontFamily="serif" fontStyle="italic">x</text>
-          <text x={ORIGIN + 8} y={toPx(0, RANGE).y + 4} fontSize="11" fill="#374151" fontFamily="serif" fontStyle="italic">y</text>
+          <text x={toPx(RANGE, 0).x - 3} y={ORIGIN + 16} fontSize="11" fill="#374151" fontFamily="'Albert Sans', sans-serif" fontStyle="italic">x</text>
+          <text x={ORIGIN + 8} y={toPx(0, RANGE).y + 4} fontSize="11" fill="#374151" fontFamily="'Albert Sans', sans-serif" fontStyle="italic">y</text>
 
           {/* Tick labels — every 2 units */}
           {gridLines.filter(i => i % 2 === 0).map(i => (
@@ -239,7 +239,7 @@ export default function SHSATGrapher({
           <line
             x1={toPx(e1.x, e1.y).x} y1={toPx(e1.x, e1.y).y}
             x2={toPx(e2.x, e2.y).x} y2={toPx(e2.x, e2.y).y}
-            stroke={isReadOnly ? "#6b7280" : "#2563eb"}
+            stroke={isReadOnly ? "#6b7280" : "#1b2a44"}
             strokeWidth={isReadOnly ? 2 : 2.5}
             opacity={isReadOnly ? 0.65 : 1}
             strokeLinecap="round"
@@ -266,7 +266,7 @@ export default function SHSATGrapher({
                 <circle
                   cx={px.x} cy={px.y}
                   r={isDrag ? 8 : 6}
-                  fill="#fff" stroke="#2563eb" strokeWidth={2.5}
+                  fill="#fff" stroke="#1b2a44" strokeWidth={2.5}
                   style={{ pointerEvents: "none" }}
                 />
                 {/* Coordinate tooltip while dragging */}
@@ -299,7 +299,7 @@ export default function SHSATGrapher({
       {!isReadOnly ? (
         // Live mode: show current equation + point coordinates + instructions
         <div style={{ display: "flex", flexDirection: "column", gap: 10, minWidth: 172 }}>
-          <div style={{ background: "#eff6ff", border: "1px solid #bfdbfe", borderRadius: 8, padding: "10px 14px" }}>
+          <div style={{ background: "#f4f6f9", border: "1px solid #c9d4e3", borderRadius: 8, padding: "10px 14px" }}>
             <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#6b7280", marginBottom: 4 }}>
               Your line
             </div>
@@ -314,7 +314,7 @@ export default function SHSATGrapher({
             </div>
             {[p1, p2].map((pt, i) => (
               <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: i === 0 ? 6 : 0 }}>
-                <div style={{ width: 8, height: 8, borderRadius: "50%", border: "2.5px solid #2563eb", background: "#fff", flexShrink: 0 }} />
+                <div style={{ width: 8, height: 8, borderRadius: "50%", border: "2.5px solid #1b2a44", background: "#fff", flexShrink: 0 }} />
                 <span style={{ fontFamily: "ui-monospace, monospace", fontSize: 13, color: "#374151" }}>
                   ({pt.x}, {pt.y})
                 </span>

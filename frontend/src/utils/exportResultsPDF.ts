@@ -169,7 +169,7 @@ function buildHTML(data: PDFExportData): string {
     const rcSubs   = s.subcategories.filter(sub => sub.subject === "english" && !isRevEdit(sub.name));
     const mathSubs = s.subcategories.filter(sub => sub.subject === "math");
     const subcatHTML = [
-      buildSubcatSection(revSubs,  L.revisingEditing,     "#3b82f6", translateSub),
+      buildSubcatSection(revSubs,  L.revisingEditing,     "#1b2a44", translateSub),
       buildSubcatSection(rcSubs,   L.readingComprehension,"#0ea5e9", translateSub),
       buildSubcatSection(mathSubs, L.math,                "#8b5cf6", translateSub),
     ].join("");
@@ -186,7 +186,7 @@ function buildHTML(data: PDFExportData): string {
         <div style="display:flex;justify-content:center;gap:20px;margin-bottom:12px;">
           <div style="text-align:center;">
             <div style="font-size:11px;color:#9ca3af;">${L.revEdit}</div>
-            <div style="font-size:16px;font-weight:700;color:#2563eb;">${Math.round((s.revisingRatio ?? s.elaRatio) * 100)}%</div>
+            <div style="font-size:16px;font-weight:700;color:#1b2a44;">${Math.round((s.revisingRatio ?? s.elaRatio) * 100)}%</div>
             <div style="font-size:10px;color:#d1d5db;">${L.weighted}</div>
           </div>
           <div style="width:1px;background:#e5e7eb;"></div>
@@ -223,14 +223,14 @@ function buildHTML(data: PDFExportData): string {
     aiBlock = `
       <div style="border:1px solid #e5e7eb;border-radius:12px;padding:20px;margin-bottom:16px;">
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
-          <div style="width:28px;height:28px;border-radius:50%;background:#2563eb;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <div style="width:28px;height:28px;border-radius:50%;background:#1b2a44;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
             <span style="color:white;font-size:14px;line-height:1;">&#9889;</span>
           </div>
           <span style="font-size:14px;font-weight:700;color:#111827;">${L.aiCoach}</span>
         </div>
         ${card(L.strengths,       a.strengths,       "#34d399", "#f0fdf4", "#065f46")}
         ${card(L.improvements,    a.improvements,    "#fbbf24", "#fffbeb", "#92400e")}
-        ${card(L.recommendations, a.recommendations, "#60a5fa", "#eff6ff", "#1e40af")}
+        ${card(L.recommendations, a.recommendations, "#6b83a6", "#f4f6f9", "#111a2a")}
       </div>`;
   }
 
@@ -243,7 +243,7 @@ function buildHTML(data: PDFExportData): string {
           <span style="color:#6b7280;">${data.englishCorrect} / ${data.englishTotal} &middot; ${pctStr(data.englishCorrect, data.englishTotal)}</span>
         </div>
         <div style="height:10px;background:#e5e7eb;border-radius:5px;overflow:hidden;">
-          <div style="height:100%;width:${pctNum(data.englishCorrect, data.englishTotal)}%;background:#3b82f6;border-radius:5px;"></div>
+          <div style="height:100%;width:${pctNum(data.englishCorrect, data.englishTotal)}%;background:#1b2a44;border-radius:5px;"></div>
         </div>
       </div>` : "",
     data.mathTotal > 0 ? `
@@ -262,11 +262,11 @@ function buildHTML(data: PDFExportData): string {
   const hasEnglish = data.englishTotal > 0;
   const hasMath    = data.mathTotal > 0;
   const qGridHeader = hasEnglish && hasMath
-    ? `<span style="font-size:11px;font-weight:700;color:#2563eb;text-transform:uppercase;letter-spacing:0.05em;">${L.englishQ(data.englishTotal)}</span>
-       <div style="flex:1;height:1px;background:#dbeafe;"></div>
+    ? `<span style="font-size:11px;font-weight:700;color:#1b2a44;text-transform:uppercase;letter-spacing:0.05em;">${L.englishQ(data.englishTotal)}</span>
+       <div style="flex:1;height:1px;background:#e6ebf2;"></div>
        <span style="font-size:11px;font-weight:700;color:#7c3aed;text-transform:uppercase;letter-spacing:0.05em;">${L.mathQ(data.englishTotal + 1, data.totalQuestions)}</span>`
     : hasEnglish
-      ? `<span style="font-size:11px;font-weight:700;color:#2563eb;text-transform:uppercase;letter-spacing:0.05em;">${L.englishQ(data.totalQuestions)}</span>`
+      ? `<span style="font-size:11px;font-weight:700;color:#1b2a44;text-transform:uppercase;letter-spacing:0.05em;">${L.englishQ(data.totalQuestions)}</span>`
       : `<span style="font-size:11px;font-weight:700;color:#7c3aed;text-transform:uppercase;letter-spacing:0.05em;">${L.mathQ(1, data.totalQuestions)}</span>`;
 
   // ── Question grid ──────────────────────────────────────────────────────────
@@ -290,7 +290,7 @@ function buildHTML(data: PDFExportData): string {
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;padding-bottom:16px;border-bottom:2px solid #f3f4f6;">
       <div>
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
-          <span style="font-size:18px;font-weight:800;color:#111827;font-family:'Outfit',sans-serif;letter-spacing:-0.03em;">&#128081; TestQueens</span>
+          <span style="font-size:20px;font-weight:600;color:#1b2a44;font-family:'Albert Sans',sans-serif;font-variant-caps:small-caps;letter-spacing:0.02em;">TestQueens</span>
         </div>
         <h1 style="font-size:22px;font-weight:800;color:#111827;margin-bottom:4px;">${data.testName}</h1>
         ${data.studentName ? `<p style="font-size:13px;color:#6b7280;">${data.studentName}</p>` : ""}
@@ -346,7 +346,7 @@ function buildHTML(data: PDFExportData): string {
     </div>
 
     <div style="margin-top:24px;padding-top:12px;border-top:1px solid #f3f4f6;display:flex;justify-content:space-between;font-size:11px;color:#9ca3af;">
-      <span style="font-family:'Outfit',sans-serif;font-weight:700;letter-spacing:-0.02em;">TestQueens</span> &middot; ${L.shsatPrep}
+      <span style="font-family:'Albert Sans',sans-serif;font-weight:600;font-variant-caps:small-caps;letter-spacing:0.02em;color:#1b2a44;">TestQueens</span> &middot; ${L.shsatPrep}
       <span>${L.generated} ${dateStr}</span>
     </div>`;
 }
