@@ -1,4 +1,4 @@
-# Chan Tutor — Frontend
+# TestQueens — Frontend
 
 Web application for SHSAT test preparation. Students take full-length adaptive mock tests,
 timed practice sets, and a diagnostic exam; tutors and administrators manage the question
