@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../supabase-client";
-import { LogoMark } from "../assets/logo";
+import { LogoLockup, LogoMark } from "../assets/logo";
 
 export default function ResetPasswordPage() {
   const navigate = useNavigate();
@@ -104,8 +104,7 @@ export default function ResetPasswordPage() {
       <div className="flex flex-1 items-center justify-center bg-white p-8">
         <div className="w-full max-w-sm flex flex-col gap-6">
           <div className="flex md:hidden items-center gap-2 mb-2">
-            <LogoMark className="h-7 w-auto" />
-            <span className="brand-name text-2xl text-slate-900">TestQueens</span>
+            <LogoLockup className="h-11 w-auto" />
           </div>
 
           {done ? (

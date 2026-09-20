@@ -2,7 +2,7 @@ import { icons } from '../assets/icons.tsx';
 import SideNavIcons from './sideNavIcons.tsx';
 import { useNavigate, useLocation } from "react-router-dom";
 import { supabase } from '../supabase-client.ts';
-import { LogoMark } from "../assets/logo";
+import { LogoLockup, LogoMark } from "../assets/logo";
 import { useContext } from 'react';
 import { UserContext } from './userContext.ts';
 
@@ -21,9 +21,10 @@ export default function SideBar() {
     <div className="flex flex-col justify-between py-4 h-screen md:w-56 w-14 bg-white border-r border-slate-200 shrink-0">
       <div className="flex flex-col gap-1">
         {/* Logo */}
-        <div className="flex items-center gap-2.5 px-4 pb-5 mb-2 border-b border-slate-100">
-          <LogoMark className="h-5 w-auto shrink-0" />
-          <span className="md:inline hidden brand-name text-base text-slate-800">TestQueens</span>
+        <div className="flex items-center justify-center px-2 md:px-4 pb-5 mb-2 border-b border-slate-100">
+          {/* Collapsed rail: crown only. Expanded: full lockup. */}
+          <LogoMark className="h-5 w-auto shrink-0 md:hidden" />
+          <LogoLockup className="hidden md:block h-10 w-auto" />
         </div>
 
         {/* Nav items */}

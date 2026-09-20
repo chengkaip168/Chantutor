@@ -117,7 +117,7 @@ export default function NumberLineClick({
     <div style={{ userSelect: "none", display: "flex", flexDirection: "column", gap: 10 }}>
       {/* ── SVG ── */}
       <div style={{
-        border: "1px solid #e2e8f0", borderRadius: 10,
+        border: "1px solid #e2e8f0", borderRadius: 5.95,
         padding: "6px 4px 4px", background: "#fff",
         boxShadow: "0 1px 4px rgba(0,0,0,0.07)",
         overflow: "hidden",
@@ -282,7 +282,7 @@ export default function NumberLineClick({
         <div style={{
           fontSize: 11.5, color: "#6b7280", lineHeight: 1.5,
           background: "#f8fafc", border: "1px solid #e2e8f0",
-          borderRadius: 8, padding: "8px 12px",
+          borderRadius: 4.76, padding: "8px 12px",
         }}>
           Click or drag to place your answer on the number line.
         </div>

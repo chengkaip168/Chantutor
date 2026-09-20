@@ -2,7 +2,7 @@ import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../supabase-client";
 import { UserContext } from "../components/userContext";
-import { LogoMark } from "../assets/logo";
+import { LogoLockup, LogoMark } from "../assets/logo";
 import AdminStudentsPanel from "../components/AdminStudentsPanel";
 import AdminReportsPanel from "../components/AdminReportsPanel";
 
@@ -78,12 +78,11 @@ export default function TutorPage() {
       <aside className="w-10 lg:w-56 shrink-0 flex flex-col bg-white border-r border-zinc-200">
         {/* Logo */}
         <div className="px-2 lg:px-5 py-5 border-b border-zinc-200">
-          <div className="flex items-center justify-center lg:justify-start gap-2.5">
-            <LogoMark className="h-5 w-auto shrink-0" />
-            <div className="min-w-0 hidden lg:block">
-              <p className="brand-name text-lg text-zinc-900 leading-tight">TestQueens</p>
-              <p className="text-sm text-zinc-400 font-medium">Tutor Panel</p>
-            </div>
+          <div className="flex flex-col items-center gap-1.5">
+            {/* Collapsed rail: crown only. Expanded: full lockup. */}
+            <LogoMark className="h-5 w-auto shrink-0 lg:hidden" />
+            <LogoLockup className="hidden lg:block h-9 w-auto" />
+            <p className="text-sm text-zinc-400 font-medium hidden lg:block">Tutor Panel</p>
           </div>
         </div>
 

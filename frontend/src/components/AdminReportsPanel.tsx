@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { supabase } from "../supabase-client";
+import { fmtSubEN } from "../utils/translations";
 
 interface Report {
   id: string;
@@ -82,7 +83,7 @@ function QuestionPreviewCard({
             {q.type === "mcq" ? "MCQ" : q.type === "grid-in" ? "Grid-in" : "Graphing"}
           </span>
           {q.sub_category && (
-            <span className="text-xs text-zinc-400 truncate">{q.sub_category}</span>
+            <span className="text-xs text-zinc-400 truncate">{fmtSubEN(q.sub_category)}</span>
           )}
         </div>
         <div className="flex items-center gap-1.5 shrink-0">

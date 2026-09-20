@@ -171,7 +171,7 @@ export default function SHSATGrapher({
     <div style={{ display: "flex", gap: 16, alignItems: "flex-start", flexWrap: "wrap", userSelect: "none" }}>
 
       {/* ── Coordinate plane SVG ── */}
-      <div style={{ border: "1px solid #e2e8f0", borderRadius: 8, padding: 6, background: "#fff", boxShadow: "0 1px 3px rgba(0,0,0,0.06)" }}>
+      <div style={{ border: "1px solid #e2e8f0", borderRadius: 4.76, padding: 6, background: "#fff", boxShadow: "0 1px 3px rgba(0,0,0,0.06)" }}>
         <svg
           ref={svgRef}
           width={SIZE}
@@ -299,7 +299,7 @@ export default function SHSATGrapher({
       {!isReadOnly ? (
         // Live mode: show current equation + point coordinates + instructions
         <div style={{ display: "flex", flexDirection: "column", gap: 10, minWidth: 172 }}>
-          <div style={{ background: "#f4f6f9", border: "1px solid #c9d4e3", borderRadius: 8, padding: "10px 14px" }}>
+          <div style={{ background: "#f4f6f9", border: "1px solid #c9d4e3", borderRadius: 4.76, padding: "10px 14px" }}>
             <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#6b7280", marginBottom: 4 }}>
               Your line
             </div>
@@ -308,7 +308,7 @@ export default function SHSATGrapher({
             </div>
           </div>
 
-          <div style={{ background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 8, padding: "10px 14px" }}>
+          <div style={{ background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 4.76, padding: "10px 14px" }}>
             <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#6b7280", marginBottom: 8 }}>
               Points
             </div>
@@ -322,7 +322,7 @@ export default function SHSATGrapher({
             ))}
           </div>
 
-          <div style={{ fontSize: 11.5, color: "#6b7280", lineHeight: 1.55, background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 8, padding: "10px 12px" }}>
+          <div style={{ fontSize: 11.5, color: "#6b7280", lineHeight: 1.55, background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 4.76, padding: "10px 12px" }}>
             Drag either point to reshape your line. Points snap to integer coordinates.
           </div>
         </div>
@@ -331,13 +331,13 @@ export default function SHSATGrapher({
         <div style={{ display: "flex", flexDirection: "column", gap: 8, minWidth: 160, paddingTop: 4 }}>
           {previousAnswer && (
             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <div style={{ width: 28, height: 3, background: "#6b7280", borderRadius: 2, flexShrink: 0 }} />
+              <div style={{ width: 28, height: 3, background: "#6b7280", borderRadius: 1.19, flexShrink: 0 }} />
               <span style={{ fontSize: 13, color: "#4b5563" }}>Your answer</span>
             </div>
           )}
           {correctEnds && (
             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <div style={{ width: 28, height: 3, background: "#10b981", borderRadius: 2, flexShrink: 0 }} />
+              <div style={{ width: 28, height: 3, background: "#10b981", borderRadius: 1.19, flexShrink: 0 }} />
               <span style={{ fontSize: 13, color: "#065f46", fontWeight: 600 }}>Correct answer</span>
             </div>
           )}

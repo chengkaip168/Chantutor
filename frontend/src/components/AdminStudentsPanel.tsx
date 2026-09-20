@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "../supabase-client";
 import ResultsModal from "./ResultsModal";
 import { fetchIncorrectReport, fetchFullIncorrectReport, exportIncorrectPDF } from "../utils/exportIncorrectPDF";
+import { fmtSubEN } from "../utils/translations";
 
 interface Tutor {
   id: string;
@@ -1256,7 +1257,7 @@ export default function AdminStudentsPanel({ isAdmin = true }: { isAdmin?: boole
                                 {ga.duration_minutes ? <span>· {Math.floor(ga.duration_minutes / 60) > 0 ? `${Math.floor(ga.duration_minutes / 60)}h ` : ""}{ga.duration_minutes % 60 > 0 ? `${ga.duration_minutes % 60}m` : ""} limit</span> : null}
                                 {ga.due_date && <span className={isDue ? "text-rose-500 font-medium" : "text-zinc-400"}>· Due {new Date(ga.due_date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</span>}
                               </div>
-                              {ga.categories && ga.categories.length > 0 && <p className="text-xs text-zinc-400 truncate">Topics: {ga.categories.join(", ")}</p>}
+                              {ga.categories && ga.categories.length > 0 && <p className="text-xs text-zinc-400 truncate">Topics: {ga.categories.map(fmtSubEN).join(", ")}</p>}
                               {ga.difficulties && ga.difficulties.length > 0 && <p className="text-xs text-zinc-400">Difficulty: {ga.difficulties.join(", ")}</p>}
                               {ga.note && <p className="text-xs text-zinc-500 italic">"{ga.note}"</p>}
                               <p className="text-xs text-zinc-400">{new Date(ga.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</p>
@@ -1537,7 +1538,7 @@ export default function AdminStudentsPanel({ isAdmin = true }: { isAdmin?: boole
                               {a.due_date && <span className={isDue && !isCompleted ? "text-rose-500 font-medium" : "text-zinc-400"}>· Due {new Date(a.due_date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</span>}
                             </div>
                             {a.categories && a.categories.length > 0 && (
-                              <p className="text-xs text-zinc-400 truncate">Topics: {a.categories.join(", ")}</p>
+                              <p className="text-xs text-zinc-400 truncate">Topics: {a.categories.map(fmtSubEN).join(", ")}</p>
                             )}
                             {a.difficulties && a.difficulties.length > 0 && (
                               <p className="text-xs text-zinc-400">Difficulty: {a.difficulties.join(", ")}</p>

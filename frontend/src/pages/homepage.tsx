@@ -7,6 +7,7 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../components/userContext";
 import { Test } from "../components/types";
 import { fetchIncorrectReport, fetchFullIncorrectReport, exportIncorrectPDF } from "../utils/exportIncorrectPDF";
+import { fmtSubEN } from "../utils/translations";
 
 interface AssignmentWithTest {
   id: string;
@@ -463,7 +464,7 @@ function HomePage() {
                               )}
                               className={accentClass}
                             />
-                            <span className="text-sm text-slate-700 leading-snug">{topic}</span>
+                            <span className="text-sm text-slate-700 leading-snug">{fmtSubEN(topic)}</span>
                           </label>
                         ))}
                       </div>
@@ -688,7 +689,7 @@ function HomePage() {
                                   {ga.duration_minutes ? <span>· {Math.floor(ga.duration_minutes / 60) > 0 ? `${Math.floor(ga.duration_minutes / 60)}h ` : ""}{ga.duration_minutes % 60 > 0 ? `${ga.duration_minutes % 60}m` : ""} limit</span> : null}
                                   {ga.due_date && <span className={isDue && !isCompleted ? "text-rose-500 font-medium" : "text-slate-400"}>· Due {new Date(ga.due_date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</span>}
                                 </div>
-                                {ga.categories && ga.categories.length > 0 && <p className="text-xs text-slate-400 truncate">Topics: {ga.categories.join(", ")}</p>}
+                                {ga.categories && ga.categories.length > 0 && <p className="text-xs text-slate-400 truncate">Topics: {ga.categories.map(fmtSubEN).join(", ")}</p>}
                                 {ga.note && <p className="text-xs text-slate-400 italic">"{ga.note}"</p>}
                               </div>
                               {myA && !isCompleted && (
@@ -787,7 +788,7 @@ function HomePage() {
                                   )}
                                 </div>
                                 {a.categories && a.categories.length > 0 && (
-                                  <p className="text-xs text-slate-400 truncate">Topics: {a.categories.join(", ")}</p>
+                                  <p className="text-xs text-slate-400 truncate">Topics: {a.categories.map(fmtSubEN).join(", ")}</p>
                                 )}
                                 {a.note && (
                                   <p className="text-xs text-slate-500 italic">"{a.note}"</p>
@@ -840,7 +841,7 @@ function HomePage() {
                                   )}
                                 </div>
                                 {a.categories && a.categories.length > 0 && (
-                                  <p className="text-xs text-slate-400 truncate">Topics: {a.categories.join(", ")}</p>
+                                  <p className="text-xs text-slate-400 truncate">Topics: {a.categories.map(fmtSubEN).join(", ")}</p>
                                 )}
                                 {a.note && (
                                   <p className="text-xs text-slate-400 italic">"{a.note}"</p>

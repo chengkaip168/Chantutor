@@ -2,6 +2,23 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { supabase } from "../supabase-client";
 import { processPassage } from "./textParser";
+import logoLockup from "../assets/logo-lockup.png";
+
+// html2canvas rasterises whatever is in the DOM at call time, so an <img> that
+// has not finished decoding captures blank. Wait for them before shooting.
+// Errors resolve rather than reject: a missing asset must not block an export.
+async function waitForImages(root: HTMLElement): Promise<void> {
+  await Promise.all(
+    Array.from(root.querySelectorAll("img")).map(img =>
+      img.complete && img.naturalWidth > 0
+        ? Promise.resolve()
+        : new Promise<void>(resolve => {
+            img.onload = () => resolve();
+            img.onerror = () => resolve();
+          })
+    )
+  );
+}
 
 export interface IncorrectQuestion {
   questionNumber: number;
@@ -280,7 +297,7 @@ function renderQuestion(q: IncorrectQuestion): string {
   if (!isChoiceBased) {
     const hasAnswer = !!q.studentAnswer;
     answersHTML = `
-      <div style="display:flex;gap:0;margin-top:10px;border-radius:8px;overflow:hidden;border:1.5px solid #e5e7eb;">
+      <div style="display:flex;gap:0;margin-top:10px;border-radius:4.76px;overflow:hidden;border:1.5px solid #e5e7eb;">
         <div style="flex:1;padding:9px 13px;background:${hasAnswer ? "#fef2f2" : "#f9fafb"};border-right:1.5px solid ${hasAnswer ? "#fecaca" : "#e5e7eb"};">
           <div style="font-size:9px;font-weight:700;color:${hasAnswer ? "#dc2626" : "#9ca3af"};text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px;">Your Answer</div>
           <div style="font-size:13px;font-weight:700;color:${hasAnswer ? "#dc2626" : "#9ca3af"};font-style:${hasAnswer ? "normal" : "italic"};">${hasAnswer ? q.studentAnswer : "Skipped"}</div>
@@ -306,14 +323,14 @@ function renderQuestion(q: IncorrectQuestion): string {
       const pillColor  = isCorrect || isStudent ? "#ffffff" : "#6b7280";
 
       const badge = isCorrect
-        ? `<span style="flex-shrink:0;margin-left:8px;padding:2px 8px;border-radius:20px;font-size:9.5px;font-weight:800;background:#dcfce7;color:#16a34a;border:1px solid #86efac;white-space:nowrap;">&#10003; Correct</span>`
+        ? `<span style="flex-shrink:0;margin-left:8px;padding:2px 8px;border-radius:11.9px;font-size:9.5px;font-weight:800;background:#dcfce7;color:#16a34a;border:1px solid #86efac;white-space:nowrap;">&#10003; Correct</span>`
         : isStudent
-        ? `<span style="flex-shrink:0;margin-left:8px;padding:2px 8px;border-radius:20px;font-size:9.5px;font-weight:800;background:#ffe4e6;color:#e11d48;border:1px solid #fda4af;white-space:nowrap;">&#10007; Your Answer</span>`
+        ? `<span style="flex-shrink:0;margin-left:8px;padding:2px 8px;border-radius:11.9px;font-size:9.5px;font-weight:800;background:#ffe4e6;color:#e11d48;border:1px solid #fda4af;white-space:nowrap;">&#10007; Your Answer</span>`
         : "";
 
       return `
-        <div style="display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:7px;background:${bg};border:1.5px solid ${border};margin-bottom:5px;">
-          <span style="flex-shrink:0;width:20px;height:20px;border-radius:5px;background:${pillBg};color:${pillColor};font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;">${letter}</span>
+        <div style="display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:4.165px;background:${bg};border:1.5px solid ${border};margin-bottom:5px;">
+          <span style="flex-shrink:0;width:20px;height:20px;border-radius:2.975px;background:${pillBg};color:${pillColor};font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;">${letter}</span>
           <span style="font-size:12px;color:${textColor};line-height:1.45;flex:1;">${prepareHtml(display)}</span>
           ${badge}
         </div>`;
@@ -342,7 +359,7 @@ function renderQuestion(q: IncorrectQuestion): string {
     ).join("");
     questionBodyHTML = `
       ${embedded.prompt ? `<div style="font-size:12.5px;color:#111827;line-height:1.6;margin-bottom:8px;">${prepareHtml(embedded.prompt)}</div>` : ""}
-      <div style="border:1.5px solid #c9d4e3;border-radius:8px;background:#f4f6f9;padding:10px 13px;margin-bottom:8px;">
+      <div style="border:1.5px solid #c9d4e3;border-radius:4.76px;background:#f4f6f9;padding:10px 13px;margin-bottom:8px;">
         <div style="font-size:9px;font-weight:700;color:#1b2a44;text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px;">Article</div>
         ${sentenceHTML}
       </div>`;
@@ -351,9 +368,9 @@ function renderQuestion(q: IncorrectQuestion): string {
   }
 
   return `
-    <div style="margin-bottom:14px;padding:13px 15px;border:1.5px solid #e5e7eb;border-radius:10px;background:#ffffff;box-shadow:0 1px 3px rgba(0,0,0,0.05);">
+    <div style="margin-bottom:14px;padding:13px 15px;border:1.5px solid #e5e7eb;border-radius:5.95px;background:#ffffff;box-shadow:0 1px 3px rgba(0,0,0,0.05);">
       <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:4px;">
-        <span style="flex-shrink:0;width:23px;height:23px;border-radius:6px;background:#162236;color:#ffffff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;margin-top:1px;">${q.questionNumber}</span>
+        <span style="flex-shrink:0;width:23px;height:23px;border-radius:3.57px;background:#162236;color:#ffffff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;margin-top:1px;">${q.questionNumber}</span>
         <div style="flex:1;">${questionBodyHTML}</div>
       </div>
       ${answersHTML}
@@ -385,7 +402,7 @@ function buildSubjectHeaderHTML(label: string, color: string, dividerBg: string,
   return `
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
       <span style="font-size:13px;font-weight:800;color:${color};">${label}</span>
-      <div style="flex:1;height:1.5px;background:${dividerBg};border-radius:1px;"></div>
+      <div style="flex:1;height:1.5px;background:${dividerBg};border-radius:0.595px;"></div>
       <span style="font-size:11px;color:#6b7280;">${count} missed</span>
     </div>`;
 }
@@ -415,14 +432,14 @@ function buildSectionHeaderHTML(section: IncorrectReportSection): string {
     : "";
   const badgeCount = missedRaw ?? section.questions.length;
   return `
-    <div style="padding:10px 14px;background:#f3f4f6;border-left:4px solid #6366f1;border-radius:0 8px 8px 0;margin-bottom:14px;margin-top:8px;">
+    <div style="padding:10px 14px;background:#f3f4f6;border-left:4px solid #6366f1;border-radius:0 4.76px 4.76px 0;margin-bottom:14px;margin-top:8px;">
       <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;">
         <div>
           <span style="font-size:14px;font-weight:800;color:#1f2937;display:block;">${section.testName}</span>
           ${dateLine}
           ${statsLine}
         </div>
-        <span style="flex-shrink:0;padding:2px 10px;border-radius:20px;font-size:10px;font-weight:700;background:#ffe4e6;color:#e11d48;border:1px solid #fda4af;white-space:nowrap;margin-top:2px;">${badgeCount} missed</span>
+        <span style="flex-shrink:0;padding:2px 10px;border-radius:11.9px;font-size:10px;font-weight:700;background:#ffe4e6;color:#e11d48;border:1px solid #fda4af;white-space:nowrap;margin-top:2px;">${badgeCount} missed</span>
       </div>
     </div>`;
 }
@@ -513,14 +530,14 @@ function buildReportHeaderHTML(data: IncorrectReportData, dateStr: string): stri
   return `
     <div style="display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:16px;border-bottom:2px solid #f3f4f6;">
       <div>
-        <div style="font-size:17px;font-weight:600;color:#1b2a44;font-family:'Albert Sans',sans-serif;font-variant-caps:small-caps;letter-spacing:0.02em;margin-bottom:5px;">TestQueens</div>
+        <img src="${logoLockup}" alt="TestQueens" style="height:30px;width:auto;display:block;margin-bottom:5px;" />
         <h1 style="font-size:19px;font-weight:800;color:#111827;margin:0 0 4px 0;">Missed Questions Report</h1>
         <p style="font-size:12.5px;font-weight:600;color:#374151;margin:0 0 2px 0;">${testName}</p>
         <p style="font-size:11.5px;color:#6b7280;margin:0 0 2px 0;">${data.studentName}</p>
         <p style="font-size:10.5px;color:#9ca3af;margin:0;">${dateStr}</p>
         ${singleStatsHTML}
       </div>
-      <div style="text-align:center;background:#fef2f2;border:1.5px solid #fecaca;border-radius:12px;padding:12px 18px;flex-shrink:0;">
+      <div style="text-align:center;background:#fef2f2;border:1.5px solid #fecaca;border-radius:7.14px;padding:12px 18px;flex-shrink:0;">
         <div style="font-size:28px;font-weight:900;color:#dc2626;line-height:1;">${totalMissed}</div>
         <div style="font-size:10px;font-weight:600;color:#f87171;margin-top:3px;text-transform:uppercase;letter-spacing:.04em;">Missed</div>
       </div>
@@ -530,7 +547,7 @@ function buildReportHeaderHTML(data: IncorrectReportData, dateStr: string): stri
 function buildReportFooterHTML(dateStr: string): string {
   return `
     <div style="padding-top:12px;border-top:1px solid #f3f4f6;display:flex;justify-content:space-between;font-size:10px;color:#9ca3af;">
-      <span style="font-family:'Albert Sans',sans-serif;font-weight:600;font-variant-caps:small-caps;letter-spacing:0.02em;color:#1b2a44;">TestQueens</span>
+      <span style="font-family:'Albert Sans',sans-serif;font-weight:600;letter-spacing:0.01em;color:#1b2a44;">TestQueens</span>
       <span>Generated ${dateStr}</span>
     </div>`;
 }
@@ -572,6 +589,7 @@ async function renderFragmentsBatch(specs: FragSpec[]): Promise<HTMLCanvasElemen
     return el;
   });
   await new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+  await Promise.all(elements.map(waitForImages));
   const canvases: HTMLCanvasElement[] = [];
   for (const el of elements) {
     canvases.push(await html2canvas(el, {
@@ -613,7 +631,7 @@ export async function exportIncorrectPDF(data: IncorrectReportData): Promise<voi
     "display:flex", "align-items:center", "justify-content:center",
   ].join(";");
   overlay.innerHTML = `
-    <div style="background:#fff;border-radius:16px;padding:28px 36px;
+    <div style="background:#fff;border-radius:9.52px;padding:28px 36px;
                 box-shadow:0 20px 60px rgba(0,0,0,0.25);
                 display:flex;flex-direction:column;align-items:center;gap:14px;min-width:200px;
                 font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">

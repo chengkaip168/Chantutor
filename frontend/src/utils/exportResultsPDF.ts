@@ -1,6 +1,23 @@
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { SUBCAT_TW, SCORE_BAND_TW, fmtSubEN } from "./translations";
+import logoLockup from "../assets/logo-lockup.png";
+
+// html2canvas rasterises whatever is in the DOM at call time, so an <img> that
+// has not finished decoding captures blank. Wait for them before shooting.
+// Errors resolve rather than reject: a missing asset must not block an export.
+async function waitForImages(root: HTMLElement): Promise<void> {
+  await Promise.all(
+    Array.from(root.querySelectorAll("img")).map(img =>
+      img.complete && img.naturalWidth > 0
+        ? Promise.resolve()
+        : new Promise<void>(resolve => {
+            img.onload = () => resolve();
+            img.onerror = () => resolve();
+          })
+    )
+  );
+}
 
 export interface PDFSubcategory {
   name: string;
@@ -85,8 +102,8 @@ function buildSubcatSection(
         <span style="color:#374151;">${translateSub(sub.name)}</span>
         <span style="color:#6b7280;font-weight:400;font-size:11px;">(${sub.correct}/${sub.total})</span>
       </div>
-      <div style="height:6px;background:#e5e7eb;border-radius:3px;overflow:hidden;">
-        <div style="height:100%;width:${subBarWidth(sub.score)};background:${accent};border-radius:3px;"></div>
+      <div style="height:6px;background:#e5e7eb;border-radius:1.785px;overflow:hidden;">
+        <div style="height:100%;width:${subBarWidth(sub.score)};background:${accent};border-radius:1.785px;"></div>
       </div>
     </div>`).join("");
   return `
@@ -174,10 +191,10 @@ function buildHTML(data: PDFExportData): string {
       buildSubcatSection(mathSubs, L.math,                "#8b5cf6", translateSub),
     ].join("");
     shsatBlock = `
-      <div style="border:1px solid #e5e7eb;border-radius:12px;padding:20px;margin-bottom:16px;">
+      <div style="border:1px solid #e5e7eb;border-radius:7.14px;padding:20px;margin-bottom:16px;">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
           <span style="font-size:14px;font-weight:700;color:#111827;">${L.estimatedScore}</span>
-          <span style="font-size:11px;color:#6b7280;background:#f9fafb;border:1px solid #e5e7eb;padding:3px 10px;border-radius:12px;">${L.diffWeighted}</span>
+          <span style="font-size:11px;color:#6b7280;background:#f9fafb;border:1px solid #e5e7eb;padding:3px 10px;border-radius:7.14px;">${L.diffWeighted}</span>
         </div>
         <div style="text-align:center;margin-bottom:12px;">
           <span style="font-size:52px;font-weight:900;color:${totalColor};">${s.total}</span>
@@ -202,7 +219,7 @@ function buildHTML(data: PDFExportData): string {
             <div style="font-size:10px;color:#d1d5db;">${L.weighted}</div>
           </div>
         </div>
-        <div style="text-align:center;background:${bannerBg};border:1px solid ${bannerBorder};color:${bannerText};font-size:12px;font-weight:600;border-radius:8px;padding:8px 12px;${subcatHTML ? "margin-bottom:16px;" : ""}">
+        <div style="text-align:center;background:${bannerBg};border:1px solid ${bannerBorder};color:${bannerText};font-size:12px;font-weight:600;border-radius:4.76px;padding:8px 12px;${subcatHTML ? "margin-bottom:16px;" : ""}">
           ${displayLabel}
         </div>
         ${subcatHTML ? `<div style="border-top:1px solid #f3f4f6;padding-top:16px;">${subcatHTML}</div>` : ""}
@@ -214,14 +231,14 @@ function buildHTML(data: PDFExportData): string {
   if (data.aiAnalysis) {
     const a = data.aiAnalysis;
     const card = (title: string, items: string[], border: string, bg: string, text: string) =>
-      `<div style="border-left:4px solid ${border};background:${bg};border-radius:0 8px 8px 0;padding:12px 14px;margin-bottom:10px;">
+      `<div style="border-left:4px solid ${border};background:${bg};border-radius:0 4.76px 4.76px 0;padding:12px 14px;margin-bottom:10px;">
         <p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:${text};margin:0 0 8px 0;">${title}</p>
         <ul style="margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:5px;">
           ${items.map(item => `<li style="font-size:12px;color:${text};display:flex;gap:8px;"><span style="flex-shrink:0;">›</span><span>${item}</span></li>`).join("")}
         </ul>
       </div>`;
     aiBlock = `
-      <div style="border:1px solid #e5e7eb;border-radius:12px;padding:20px;margin-bottom:16px;">
+      <div style="border:1px solid #e5e7eb;border-radius:7.14px;padding:20px;margin-bottom:16px;">
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
           <div style="width:28px;height:28px;border-radius:50%;background:#1b2a44;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
             <span style="color:white;font-size:14px;line-height:1;">&#9889;</span>
@@ -242,8 +259,8 @@ function buildHTML(data: PDFExportData): string {
           <span style="font-weight:600;color:#374151;">${L.englishCombined}</span>
           <span style="color:#6b7280;">${data.englishCorrect} / ${data.englishTotal} &middot; ${pctStr(data.englishCorrect, data.englishTotal)}</span>
         </div>
-        <div style="height:10px;background:#e5e7eb;border-radius:5px;overflow:hidden;">
-          <div style="height:100%;width:${pctNum(data.englishCorrect, data.englishTotal)}%;background:#1b2a44;border-radius:5px;"></div>
+        <div style="height:10px;background:#e5e7eb;border-radius:2.975px;overflow:hidden;">
+          <div style="height:100%;width:${pctNum(data.englishCorrect, data.englishTotal)}%;background:#1b2a44;border-radius:2.975px;"></div>
         </div>
       </div>` : "",
     data.mathTotal > 0 ? `
@@ -252,8 +269,8 @@ function buildHTML(data: PDFExportData): string {
           <span style="font-weight:600;color:#374151;">${L.math}</span>
           <span style="color:#6b7280;">${data.mathCorrect} / ${data.mathTotal} &middot; ${pctStr(data.mathCorrect, data.mathTotal)}</span>
         </div>
-        <div style="height:10px;background:#e5e7eb;border-radius:5px;overflow:hidden;">
-          <div style="height:100%;width:${pctNum(data.mathCorrect, data.mathTotal)}%;background:#8b5cf6;border-radius:5px;"></div>
+        <div style="height:10px;background:#e5e7eb;border-radius:2.975px;overflow:hidden;">
+          <div style="height:100%;width:${pctNum(data.mathCorrect, data.mathTotal)}%;background:#8b5cf6;border-radius:2.975px;"></div>
         </div>
       </div>` : "",
   ].filter(Boolean).join("");
@@ -280,7 +297,7 @@ function buildHTML(data: PDFExportData): string {
     let bg = "#f3f4f6"; let color = "#9ca3af"; let border = "#e5e7eb";
     if (c === true)  { bg = "#d1fae5"; color = "#059669"; border = "#6ee7b7"; }
     if (c === false) { bg = "#fee2e2"; color = "#dc2626"; border = "#fca5a5"; }
-    return `<div style="width:24px;height:24px;border-radius:4px;background:${bg};border:1px solid ${border};color:${color};font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;font-family:monospace;">${i + 1}</div>`;
+    return `<div style="width:24px;height:24px;border-radius:2.38px;background:${bg};border:1px solid ${border};color:${color};font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;font-family:monospace;">${i + 1}</div>`;
   }).join("");
 
   const dateLocale = zh ? "zh-TW" : "en-US";
@@ -290,7 +307,7 @@ function buildHTML(data: PDFExportData): string {
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;padding-bottom:16px;border-bottom:2px solid #f3f4f6;">
       <div>
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
-          <span style="font-size:20px;font-weight:600;color:#1b2a44;font-family:'Albert Sans',sans-serif;font-variant-caps:small-caps;letter-spacing:0.02em;">TestQueens</span>
+          <img src="${logoLockup}" alt="TestQueens" style="height:34px;width:auto;display:block;" />
         </div>
         <h1 style="font-size:22px;font-weight:800;color:#111827;margin-bottom:4px;">${data.testName}</h1>
         ${data.studentName ? `<p style="font-size:13px;color:#6b7280;">${data.studentName}</p>` : ""}
@@ -302,7 +319,7 @@ function buildHTML(data: PDFExportData): string {
       </div>
     </div>
 
-    <div style="border:1px solid #e5e7eb;border-radius:12px;padding:20px;margin-bottom:16px;">
+    <div style="border:1px solid #e5e7eb;border-radius:7.14px;padding:20px;margin-bottom:16px;">
       <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap;">
         ${buildScoreCircle(overallPct, circleColor, L.scoreCircleLabel)}
         <div style="flex:1;min-width:180px;display:flex;flex-direction:column;gap:10px;">
@@ -328,7 +345,7 @@ function buildHTML(data: PDFExportData): string {
     ${shsatBlock}
     ${aiBlock}
 
-    <div style="border:1px solid #e5e7eb;border-radius:12px;padding:20px;">
+    <div style="border:1px solid #e5e7eb;border-radius:7.14px;padding:20px;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
         <span style="font-size:14px;font-weight:700;color:#111827;">${L.questionBreakdown}</span>
         <div style="display:flex;gap:12px;font-size:11px;color:#6b7280;">
@@ -346,7 +363,7 @@ function buildHTML(data: PDFExportData): string {
     </div>
 
     <div style="margin-top:24px;padding-top:12px;border-top:1px solid #f3f4f6;display:flex;justify-content:space-between;font-size:11px;color:#9ca3af;">
-      <span style="font-family:'Albert Sans',sans-serif;font-weight:600;font-variant-caps:small-caps;letter-spacing:0.02em;color:#1b2a44;">TestQueens</span> &middot; ${L.shsatPrep}
+      <span style="font-family:'Albert Sans',sans-serif;font-weight:600;letter-spacing:0.01em;color:#1b2a44;">TestQueens</span> &middot; ${L.shsatPrep}
       <span>${L.generated} ${dateStr}</span>
     </div>`;
 }
@@ -367,6 +384,7 @@ export async function exportResultsPDF(data: PDFExportData): Promise<void> {
   ].join(";");
   container.innerHTML = buildHTML(data);
   document.body.appendChild(container);
+  await waitForImages(container);
 
   try {
     const canvas = await html2canvas(container, {

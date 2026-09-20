@@ -28,6 +28,20 @@
   --color-blue-900: #0d1420;
   --color-blue-950: #080d15;
 
+  /* ── Corner radius ──────────────────────────────────────────────────
+     Every step is 59.5% of the Tailwind default (-30%, then a further -15%),
+     applied here so all 369 rounded-* utilities tighten at once.
+     `rounded-full` is deliberately excluded: it is the pill/circle token
+     (avatars, badges, toggles) and a fraction of 9999px is still fully round. */
+  --radius-xs:  0.074375rem; /* 1.19px <- 2px  */
+  --radius-sm:  0.14875rem;  /* 2.38px <- 4px  */
+  --radius-md:  0.223125rem; /* 3.57px <- 6px  */
+  --radius-lg:  0.2975rem;   /* 4.76px <- 8px  */
+  --radius-xl:  0.44625rem;  /* 7.14px <- 12px */
+  --radius-2xl: 0.595rem;    /* 9.52px <- 16px */
+  --radius-3xl: 0.8925rem;   /* 14.3px <- 24px */
+  --radius-4xl: 1.19rem;     /* 19.0px <- 32px */
+
   /* Gold */
   --color-amber-50:  #faf7f0;
   --color-amber-100: #f4eede;
@@ -50,11 +64,12 @@ button {
   font-family: 'Almendra', 'Albert Sans', sans-serif;
 }
 
-/* Wordmark — small-caps echoing the logo lockup's structure.
-   "TestQueens" renders as large T + Q with small-cap EST / UEENS. */
+/* Text wordmark. Only used where the lockup image cannot go — the navy
+   wordmark would be invisible on the dark signup / reset panels.
+   No small-caps: Albert Sans has no true small-cap set, so browsers
+   synthesised them by scaling capitals, which read as broken lettering. */
 .brand-name {
   font-family: 'Albert Sans', sans-serif;
   font-weight: 600;
-  font-variant-caps: small-caps;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.01em;
 }

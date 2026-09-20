@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { supabase } from "../supabase-client";
 import { useNavigate } from "react-router-dom";
-import { LogoMark } from "../assets/logo";
+import { LogoLockup, LogoMark } from "../assets/logo";
 
 function SignUpPage() {
   const [accountType, setAccountType] = useState<"student" | "parent" | "tutor">("student");
@@ -92,8 +92,7 @@ function SignUpPage() {
       <div className="flex flex-1 items-center justify-center bg-white p-4 sm:p-8 overflow-y-auto">
         <div className="w-full max-w-sm flex flex-col gap-6 py-4">
           <div className="flex md:hidden items-center gap-2 mb-2">
-            <LogoMark className="h-7 w-auto" />
-            <span className="brand-name text-2xl text-slate-900">TestQueens</span>
+            <LogoLockup className="h-11 w-auto" />
           </div>
           <div>
             <h2 className="text-xl sm:text-2xl font-bold text-slate-900">Create account</h2>

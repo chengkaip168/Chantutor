@@ -1,7 +1,7 @@
 import { supabase } from "../supabase-client";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { LogoLockup, LogoMark } from "../assets/logo";
+import { LogoLockup } from "../assets/logo";
 import "./loginpage.css";
 
 function LoginPage() {
@@ -55,12 +55,17 @@ function LoginPage() {
 
   return (
     <div className="tq-login">
-      {/* Decorative background — shapes deliberately cross the card's edge */}
-      <div className="tq-bg" aria-hidden="true" />
-      <div className="tq-shape tq-shape-1" aria-hidden="true" />
-      <div className="tq-shape tq-shape-2" aria-hidden="true" />
-      <div className="tq-shape tq-shape-3" aria-hidden="true" />
-      <div className="tq-grain" aria-hidden="true" />
+      {/* Decorative canvas — gradient, shapes, then grain. The navy form is
+          grid-aligned so it tucks under the card's left edge exactly. */}
+      <div className="tq-canvas" aria-hidden="true">
+        <div className="tq-bg" />
+        <div className="tq-shapes">
+          <div className="tq-shape tq-shape-diamond" />
+          <div className="tq-shape tq-shape-disc" />
+          <div className="tq-shape tq-shape-bar" />
+        </div>
+        <div className="tq-grain" />
+      </div>
 
       <div className="tq-shell">
       {/* Left panel — branding */}
@@ -75,12 +80,14 @@ function LoginPage() {
           <hr className="tq-rule tq-a-rule" aria-hidden="true" />
           <div className="tq-bullets">
             {[
-              "Adaptive diagnostic testing",
-              "AI-powered performance insights",
-              "Targeted practice by topic",
+              "Pinpoint your weak spots in one diagnostic",
+              "See exactly where your points are slipping",
+              "Drill the topics that actually move your score",
             ].map((f, i) => (
               <div key={f} className={`tq-bullet tq-a-b${i + 1}`}>
-                <div className="tq-bullet-dot" />
+                <svg className="tq-bullet-mark" viewBox="0 0 10 10" aria-hidden="true">
+                  <path d="M5 0 L10 5 L5 10 L0 5 Z" />
+                </svg>
                 {f}
               </div>
             ))}
@@ -92,11 +99,10 @@ function LoginPage() {
       <div className="tq-formzone">
         <div className="tq-card tq-a-card">
           <div className="tq-mobile-brand">
-            <LogoMark className="h-6 w-auto" />
-            <span className="brand-name text-2xl text-slate-900">TestQueens</span>
+            <LogoLockup className="h-10 w-auto" />
           </div>
           <div className="tq-card-head">
-            <h2 className="tq-h2">Welcome back</h2>
+            <h2 className="tq-h2">Welcome</h2>
             <p className="tq-sub">Sign in to continue your practice.</p>
           </div>
           {showForgot ? (
