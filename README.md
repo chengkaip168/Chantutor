@@ -4,7 +4,7 @@ Web application for SHSAT test preparation. Students take full-length adaptive m
 timed practice sets, and a diagnostic exam; tutors and administrators manage the question
 bank, assign work, and review performance.
 
-Deployed at [testqueens.com](https://testqueens.com). Developed by[Hamana Studio](https://hamana.studio)
+Deployed at [testqueens.com](https://testqueens.com). Developed by [Hamana Studio](https://hamana.studio)
 
 ## Stack
 
