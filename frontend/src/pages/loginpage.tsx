@@ -55,15 +55,11 @@ function LoginPage() {
 
   return (
     <div className="tq-login">
-      {/* Decorative canvas — gradient, shapes, then grain. The navy form is
-          grid-aligned so it tucks under the card's left edge exactly. */}
+      {/* Structural backdrop: parchment, then a solid navy panel whose hard
+          left edge the card straddles and blurs, then grain over both. */}
       <div className="tq-canvas" aria-hidden="true">
         <div className="tq-bg" />
-        <div className="tq-shapes">
-          <div className="tq-shape tq-shape-diamond" />
-          <div className="tq-shape tq-shape-disc" />
-          <div className="tq-shape tq-shape-bar" />
-        </div>
+        <div className="tq-panel" />
         <div className="tq-grain" />
       </div>
 
@@ -223,6 +219,11 @@ function LoginPage() {
           )}
         </div>
       </div>
+      </div>
+
+      {/* Footer — copyright only; there are no privacy/terms pages. */}
+      <div className="tq-footer">
+        <span className="tq-foot-copy">© 2026 TestQueens</span>
       </div>
     </div>
   );

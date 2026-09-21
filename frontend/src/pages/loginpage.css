@@ -56,11 +56,21 @@
   --s4: 32px;
   --s6: 48px;
 
-  /* Shared grid — .tq-shell and .tq-shapes MUST use identical values so the
-     decorative shapes line up with the card's real column edges. */
+  /* Shared grid */
   --grid-max: 1280px;
   --grid-gap: 24px;
   --grid-pad: clamp(24px, 4vw, 48px);
+
+  /* ── The structural split ───────────────────────────────────────────
+     The navy panel's hard left edge. The card is positioned FROM this
+     value rather than from grid columns, so the straddle stays exact at
+     every viewport instead of drifting as the 1280px wrapper centres. */
+  --panel-x: 58vw;                 /* navy occupies the right 42% */
+  --blend:   110px;                /* how far the navy edge dissolves */
+  --card-w:  clamp(20rem, 30vw, 27rem);
+  --shell-inset: max(0px, (100vw - var(--grid-max)) / 2);
+  /* Horizontal midpoint of the blue zone — the card centres on this. */
+  --panel-center: calc(var(--panel-x) + (100vw - var(--panel-x)) / 2);
 
   position: relative;
   min-height: 100vh;
@@ -73,7 +83,7 @@
   font-family: 'Karla', sans-serif;
 }
 
-/* ══ Background canvas: gradient → shapes → grain, all below content ══ */
+/* ══ Background canvas: parchment → navy panel → grain, below content ══ */
 .tq-canvas {
   position: absolute;
   inset: 0;
@@ -86,86 +96,34 @@
   position: absolute;
   inset: 0;
   z-index: 0;
-  /* Vignette very slightly toward parchment-300 at the outer corners. */
-  background:
-    radial-gradient(120% 120% at 50% 50%, transparent 55%, var(--parchment-300) 100%),
-    radial-gradient(90% 70% at 18% 12%, var(--parchment-50) 0%, transparent 62%),
-    linear-gradient(105deg, var(--parchment-100) 0%, var(--parchment-100) 44%, var(--parchment-200) 100%);
-  animation: tq-fade 520ms ease-out both;
+  background: var(--parchment-100);
 }
 
-/* Shapes live on the SAME grid as the content, so tucking one under the
-   card's left edge is exact rather than a percentage guess. */
-.tq-shapes {
+/* ── The navy panel ───────────────────────────────────────────────────
+   Frosted rather than solid: slightly translucent so the parchment and the
+   grain read through it, and its left edge dissolves across --blend*2 so it
+   melts into the cream instead of cutting it. Fades in first, ahead of the
+   logo stagger. */
+.tq-panel {
   position: absolute;
-  inset: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: calc(var(--panel-x) - var(--blend));
   z-index: 1;
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  column-gap: var(--grid-gap);
-  max-width: var(--grid-max);
-  margin-inline: auto;
-  padding-inline: var(--grid-pad);
-  box-sizing: border-box;
-  animation: tq-fade 520ms ease-out both;
+  background: linear-gradient(
+    to right,
+    rgba(27, 42, 68, 0) 0,
+    rgba(27, 42, 68, 0.96) calc(var(--blend) * 2)
+  );
+  animation: tq-fade 420ms ease-out both;
 }
 
-/* ── Geometry ─────────────────────────────────────────────────────────
-   Every decorative form sits INSIDE the card's footprint (columns 8–12,
-   vertically centred), so each one is only ever seen through the glass.
-   Nothing floats loose in the open parchment.
-
-   Alphas are capped by contrast maths, not taste: at the card's 0.47 fill,
-   navy stays readable behind navy-500 body text up to 0.52 alpha, so the
-   diamond sits at 0.42 for margin. Gold and parchment are safe at any alpha. */
-.tq-shape { grid-row: 1; pointer-events: none; }
-
-/* 1 — Diamond, echoing the apex of the crown. Hard edges, so the glass has a
-   crisp contour to soften. */
-.tq-shape-diamond {
-  grid-column: 9 / 11;
-  justify-self: center;
-  align-self: start;
-  width: clamp(120px, 17vh, 210px);
-  height: clamp(120px, 17vh, 210px);
-  margin-top: 24vh;
-  background: var(--navy-700);
-  opacity: 0.42;
-  transform: rotate(45deg);
-}
-
-/* 2 — Gold disc, soft edge. Different value AND different edge quality from
-   the diamond, so the blur has more than one kind of contour to work on. */
-.tq-shape-disc {
-  grid-column: 10 / 13;
-  justify-self: center;
-  align-self: start;
-  width: clamp(150px, 24vh, 300px);
-  height: clamp(150px, 24vh, 300px);
-  margin-top: 46vh;
-  border-radius: 50%;
-  background: var(--gold-500);
-  opacity: 0.55;
-  filter: blur(6px);
-}
-
-/* 3 — Slim angled bar. Reads as structure rather than another blob. */
-.tq-shape-bar {
-  grid-column: 8 / 12;
-  justify-self: stretch;
-  align-self: start;
-  height: clamp(28px, 5vh, 56px);
-  margin-top: 38vh;
-  background: var(--parchment-300);
-  opacity: 0.9;
-  transform: rotate(-9deg);
-}
-
-/* Paper, not static. Above the shapes, below the content. */
+/* Paper, not static. Above the panel, below the content, across both zones. */
 .tq-grain {
   position: absolute;
   inset: 0;
-  z-index: 2;
+  z-index: 3;
   opacity: 0.04;
   background-repeat: repeat;
   background-size: 180px 180px;
@@ -173,19 +131,21 @@
 }
 
 /* ══ Content grid ══════════════════════════════════════════════════════
-   12 columns, 24px gutters, 1280px max, centred. Brand 1–5, card 8–12,
-   so neither block touches the viewport edge and the dead middle is gone. */
+   12 columns, 24px gutters, 1280px max, centred. */
 .tq-shell {
   position: relative;
-  z-index: 3;
+  z-index: 4;
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   column-gap: var(--grid-gap);
   align-content: center;
-  align-items: start;              /* card top == lockup top */
+  align-items: start;              /* card hangs from the row top */
   max-width: var(--grid-max);
   margin-inline: auto;
-  padding: var(--s6) var(--grid-pad);
+  /* Symmetric padding, so the centred row lands on the true 50% line. The
+     footer is absolutely positioned and takes no flow space, so it needs no
+     allowance here. */
+  padding: calc(var(--s6) + var(--s3)) var(--grid-pad);
   min-height: 100vh;
   min-height: 100dvh;
   box-sizing: border-box;
@@ -193,9 +153,34 @@
 
 .tq-brandzone {
   grid-column: 1 / 6;                   /* columns 1–5 */
+  grid-row: 1;
+  /* Vertically centred against the row, which the taller card defines — the
+     brand block is shorter, so it sits mid-card rather than hanging from the
+     top edge. Horizontal placement is untouched. */
+  align-self: center;
   padding-left: 30px;                   /* nudged off the left edge */
 }
-.tq-formzone  { grid-column: 8 / 13; }  /* columns 8–12 */
+
+/* Centred on the blue zone's midpoint, not on grid columns, so it stays
+   centred as the wrapper centres. Reading the calc outward: start at the
+   blue zone's centre, convert it into the shell's content box by removing
+   the wrapper inset and padding, then back off half the card's width. */
+.tq-formzone {
+  /* Both zones are pinned to row 1 explicitly. This column span overlaps the
+     brand zone's, and auto-placement will not share a row between overlapping
+     items — without an explicit grid-row the card drops to row 2, below the
+     fold. The margin-left below is what keeps them visually clear. */
+  grid-column: 1 / -1;
+  grid-row: 1;
+  justify-self: start;
+  width: var(--card-w);
+  margin-left: calc(
+    var(--panel-center)
+    - var(--shell-inset)
+    - var(--grid-pad)
+    - (var(--card-w) / 2)
+  );
+}
 
 /* ── Brand zone ────────────────────────────────────────────────────── */
 .tq-brand-inner {
@@ -261,23 +246,36 @@
 }
 
 /* ══ The glass card ═══════════════════════════════════════════════════
-   Genuinely translucent. Where the navy form passes beneath the left edge,
-   this region visibly darkens and cools — that is the proof the blur is real. */
+   Centred on the blue zone, so the WHOLE card sits on the dark backdrop
+   rather than half of it. That raises the fill requirement: 0.78 holds
+   navy-500 body text at 5.2:1 against the panel, with the glass geometry
+   showing through beneath it. */
 .tq-card {
   position: relative;
   width: 100%;
   padding: var(--s4);              /* equal on all four sides */
   box-sizing: border-box;
   border-radius: var(--r-card);
-  /* 15% more translucent than before (0.55 → 0.47), with more blur and
-     saturation to match. */
-  background: rgba(250, 247, 241, 0.47);
-  -webkit-backdrop-filter: blur(28px) saturate(135%);
-  backdrop-filter: blur(28px) saturate(135%);
-  border: 1px solid var(--rim-shade);
-  border-top-color: var(--rim-lit);
-  border-left-color: var(--rim-lit);
-  box-shadow: var(--shadow-tight), var(--shadow-wide), var(--inset-lit);
+  /* Cream glass over navy. The fill is deliberately WARMER than the page's
+     parchment (#fff6e6 vs #f4efe4): blending cream into navy desaturates it
+     toward grey, so the base is over-warmed to land back on parchment's own
+     warmth once composited. Transmission varies across the sheet. */
+  background: linear-gradient(
+    135deg,
+    rgba(255, 246, 230, 0.72) 0%,
+    rgba(255, 246, 230, 0.80) 46%,
+    rgba(255, 246, 230, 0.92) 100%
+  );
+  -webkit-backdrop-filter: blur(26px) saturate(125%);
+  backdrop-filter: blur(26px) saturate(125%);
+  border: 1px solid rgba(27, 42, 68, 0.14);
+  border-top-color: rgba(255, 255, 255, 0.95);
+  border-left-color: rgba(255, 255, 255, 0.95);
+  box-shadow:
+    0 2px 6px rgba(9, 14, 26, 0.22),
+    0 24px 60px rgba(9, 14, 26, 0.30),
+    inset 1px 1px 0 rgba(255, 255, 255, 0.95),
+    inset -1px -1px 0 rgba(27, 42, 68, 0.10);
 }
 
 .tq-card-head { margin-bottom: var(--s3); }
@@ -350,8 +348,8 @@
 .tq-btn {
   width: 100%;
   min-height: 48px;
-  /* Almendra runs a smaller x-height than Karla, so it is set larger to hold
-     the same optical weight as the primary action. */
+  /* Almendra runs a smaller x-height than the sans faces, so it is set larger
+     to hold the same optical weight as the primary action. */
   font-family: 'Almendra', 'Albert Sans', sans-serif;
   font-size: 17px;
   font-weight: 700;
@@ -438,6 +436,32 @@
 /* Mobile duplicate brand block — the lockup covers every breakpoint. */
 .tq-mobile-brand { display: none; }
 
+/* ══ Footer ═══════════════════════════════════════════════════════════
+   Spans both zones on the same 1280px wrapper: the copyright falls over
+   cream, the links over navy, so each takes its colour from the zone it
+   actually sits on. */
+.tq-footer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: var(--s4);
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  max-width: var(--grid-max);
+  margin-inline: auto;
+  padding-inline: var(--grid-pad);
+  box-sizing: border-box;
+  animation: tq-rise-sm 360ms ease-out 620ms both;
+}
+
+.tq-foot-copy {
+  font-family: 'Karla', sans-serif;
+  font-size: 12px;
+  color: var(--navy-500);
+}
+
+
 /* ══ Entrance ═════════════════════════════════════════════════════════
    Transform and opacity only. Never width/height/top/left/filter, which
    thrash layout alongside backdrop-filter. */
@@ -465,10 +489,12 @@
     grid-template-columns: 1fr;
     align-content: start;
     row-gap: var(--s6);
-    padding: var(--s6) var(--s3);
+    padding: var(--s6) var(--s3) calc(var(--s6) + 10vh);
   }
+  /* grid-row returns to auto so the two zones stack instead of overlapping —
+     they share a column here, unlike the desktop layout. */
   .tq-brandzone,
-  .tq-formzone { grid-column: 1 / -1; }
+  .tq-formzone { grid-column: 1 / -1; grid-row: auto; }
   /* Centred when stacked, so the 30px desktop nudge is dropped. */
   .tq-brandzone { justify-self: center; padding-left: 0; }
   .tq-brand-inner { align-items: center; text-align: center; }
@@ -483,28 +509,35 @@
 
   .tq-card {
     padding: var(--s3);
+    /* Stacked, the card can sit over cream or over the navy band, so the
+       fill goes dense enough to stay legible on either. */
+    background: rgba(255, 246, 230, 0.94);
     /* Lighter blur protects frame rate on mobile GPUs */
     -webkit-backdrop-filter: blur(14px) saturate(120%);
     backdrop-filter: blur(14px) saturate(120%);
   }
   .tq-h2 { font-size: 32px; font-variation-settings: 'opsz' 32; }
 
-  /* Stacked, the card is full-width, so there is no left edge to tuck under
-     — the navy form could only end up behind text. Removed rather than
-     re-tinted; the soft and gold forms carry the background on mobile. */
-  /* Stacked, the card sits lower in the page, so the forms are pulled down
-     with it to stay inside its footprint. */
-  .tq-shape-diamond { grid-column: 2 / 6;  margin-top: 62vh; }
-  .tq-shape-disc    { grid-column: 7 / 12; margin-top: 78vh; }
-  .tq-shape-bar     { grid-column: 1 / 9;  margin-top: 70vh; }
+  /* Stacked, a vertical split has nothing to straddle, so the panel becomes
+     a horizontal band behind the lower half and the card returns to flow. */
+  .tq-formzone {
+    justify-self: center;
+    width: 100%;
+    max-width: 26rem;
+    margin-left: 0;
+  }
+  .tq-panel { top: auto; left: 0; height: 46vh;
+              background: linear-gradient(to bottom, rgba(27, 42, 68, 0) 0, rgba(27, 42, 68, 0.96) 96px); }
+
+  /* Footer stacks so the links stay on the navy band. */
+  .tq-footer { flex-direction: column; gap: var(--s1); text-align: center; }
 }
 
 /* ══ Fallback: near-solid fills where backdrop-filter is unsupported ══ */
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  /* Without blur the card is near-solid, so the forms beneath it would only
-     read as hard-edged blotches. They are hidden instead. */
-  .tq-card { background: rgba(250, 247, 241, 0.96); }
-  .tq-shapes { display: none; }
+  /* Without blur the panel edge would cut the card as a hard line, so the
+     fill goes near-solid and the card reads as an opaque sheet instead. */
+  .tq-card { background: rgba(250, 247, 241, 0.97); }
 }
 
 /* ══ Reduced motion: every animation and transition off ═════════════ */
@@ -515,7 +548,15 @@
     animation: none !important;
     transition: none !important;
   }
-  .tq-bg, .tq-shapes,
+  /* Opacity-only fades. Kept separate from the transform group on purpose:
+     resetting transform here would clobber any layout transform that is not
+     animation. */
+  .tq-bg, .tq-panel {
+    opacity: 1 !important;
+  }
+
+  /* These genuinely animate transform, so both properties reset. */
+  .tq-footer,
   .tq-a-lockup, .tq-a-tagline, .tq-a-rule,
   .tq-a-b1, .tq-a-b2, .tq-a-b3,
   .tq-a-card, .tq-a-f1, .tq-a-f2, .tq-a-f3, .tq-a-f4 {
